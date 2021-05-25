@@ -12,6 +12,9 @@ public class GameManager : MonoBehaviour
 
     public GameObject level; // 불렛 등 레벨 수정할 변수
     public GameObject bulletSpawnerPrefab;
+    public GameObject itemPrefab;
+    int prevItemCheck;
+
     private Vector3[] bulletSpawners = new Vector3[4];
     int spawnCounter = 0;
 
@@ -52,6 +55,16 @@ public class GameManager : MonoBehaviour
             surviveTime += Time.deltaTime;
             // 갱신한 생존 시간을 timeText 텍스트 컴포넌틀 이용해 표시
             timeText.text = "Time: " + (int)surviveTime;
+
+            if(surviveTime % 5f <= 0.01f && prevItemCheck == 4)
+            {
+                Vector3 randpos = new Vector3(Random.Range(-8f, 8f), 0f, Random.Range(-8f, 8f));
+
+                GameObject item = Instantiate(itemPrefab, randpos, Quaternion.identity);
+                item.transform.parent = level.transform;
+                item.transform.localPosition = randpos;
+            }
+            prevItemCheck = (int)(surviveTime % 5f);
 
             if (surviveTime < 5f && spawnCounter == 0)
             {

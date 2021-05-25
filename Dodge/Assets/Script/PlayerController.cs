@@ -7,6 +7,8 @@ public class PlayerController : MonoBehaviour
     private Rigidbody playerRigidbody; // 이동에 사용할 리지드바디 컴포넌트
     public float speed = 8f; // 이동 속력
 
+    public int hp = 100;
+    public HPBar hpbar;
     // Start is called before the first frame updates
     void Start()
     {
@@ -32,7 +34,7 @@ public class PlayerController : MonoBehaviour
         playerRigidbody.velocity = newVelocity;
     }
 
-    public void Die()
+    void Die() // public 빼기 - 자신이 처리하는 것이 좋을 것 같다. [정보 은닉 개념을 잘 사용!!]
     {
         // 자신의 게임 오브젝트를 비활성화
         gameObject.SetActive(false);
@@ -41,5 +43,25 @@ public class PlayerController : MonoBehaviour
         GameManager gameManager = FindObjectOfType<GameManager>();
         // 가져온 GameManger 오브젝트의 EndGame () 메서드 실행
         gameManager.EndGame();
+    }
+
+    public void GetDamage(int damage)
+    {
+        hp -= damage;
+        hpbar.SetHP(hp);
+        if(hp <= 0)
+        {
+            Die();
+        }
+    }
+
+    public void GetHeal(int heal)
+    {
+        hp += heal;
+        if (hp > 100)
+        {
+            hp = 100;
+        }
+        hpbar.SetHP(hp);
     }
 }
