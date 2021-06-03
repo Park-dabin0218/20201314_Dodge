@@ -9,6 +9,11 @@ public class PlayerController : MonoBehaviour
 
     public int hp = 100;
     public HPBar hpbar;
+
+    private float spawnRate = 0.2f; // 플레이어는 0.2초마다 총알 발사
+    private float timerAfterSpawn;
+    public GameObject playerbulletPrefab;
+
     // Start is called before the first frame updates
     void Start()
     {
@@ -32,6 +37,13 @@ public class PlayerController : MonoBehaviour
 
         //리지드바디의 속도에 newVelocity 할당
         playerRigidbody.velocity = newVelocity;
+        timerAfterSpawn += Time.deltaTime;
+
+        if(Input.GetButton("Fire 1") && timerAfterSpawn >= spawnRate)
+        {
+            timerAfterSpawn = 0;
+            GameObject bullet = Instantiate(playerbulletPrefab, transform.position, transform.rotation);
+        }
     }
 
     void Die() // public 빼기 - 자신이 처리하는 것이 좋을 것 같다. [정보 은닉 개념을 잘 사용!!]
